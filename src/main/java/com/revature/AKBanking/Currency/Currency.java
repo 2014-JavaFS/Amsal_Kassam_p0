@@ -1,19 +1,19 @@
 package com.revature.AKBanking.Currency;
 
 public class Currency {
-    private int currencyCode;
+    private String currencyCode;
     private String currencyName;
     private float USDExchangeRate;
     private String currencySymbol;
 
-    public Currency(int currencyCode, String currencyName, float USDExchangeRate, String currencySymbol) {
+    public Currency(String currencyCode, String currencyName, float USDExchangeRate, String currencySymbol) {
         this.currencyCode = currencyCode;
         this.currencyName = currencyName;
         this.USDExchangeRate = USDExchangeRate;
         this.currencySymbol = currencySymbol;
     }
 
-    public int getCurrencyCode() {
+    public String getCurrencyCode() {
         return currencyCode;
     }
 
