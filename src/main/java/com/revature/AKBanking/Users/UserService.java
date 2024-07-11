@@ -12,10 +12,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class UserService implements Serviceable<User>{
+public class UserService implements Serviceable<User> {
     private List<User> users;
 
-    public UserService(){
+    public UserService() {
         users = new ArrayList<User>();
     }
 
@@ -33,14 +33,14 @@ public class UserService implements Serviceable<User>{
         return newObject;
     }
 
-    public User findByLoginInfo(String email, String password){
+    public User findByLoginInfo(String email, String password) {
         User[] results = users.stream().filter
-            (user -> user.getEmail().equals(email) && user.getPassword().equals(password)).toArray(User[]::new);
+                (user -> user.getEmail().equals(email) && user.getPassword().equals(password)).toArray(User[]::new);
         return results.length > 0 ? results[0] : null;
     }
 
-    public void validateUser(User user) throws InvalidInputException{
-        if (user == null){
+    public void validateUser(User user) throws InvalidInputException {
+        if (user == null) {
             throw new InvalidInputException("User is null");
         }
         StringBuilder errorMessage = new StringBuilder();
@@ -51,7 +51,7 @@ public class UserService implements Serviceable<User>{
         validationSteps.put("Email is empty", user.getEmail() == null || user.getEmail().isEmpty());
         validationSteps.put("Password is empty", user.getPassword() == null || user.getPassword().isEmpty());
 
-        validationSteps.put("ID is out of bounds", user.getId() < 999999 || user.getId() > 9999999); //between 6 nines and 7 nines aka any 7 digit number
+        validationSteps.put("ID is out of bounds", user.getId() < 1000000 || user.getId() > 9999999); //any 7-digit number
 
         String emailRegex = "^[\\w\\.\\-]+@([\\w\\-]+\\.)+\\w{2,}$";
         //email must be of form [a+][@][z+][.zz] where square brackets are required
@@ -61,12 +61,12 @@ public class UserService implements Serviceable<User>{
         //password must contain 1 lowercase, 1 uppercase, 1 number, and be between 8 and 24 characters
         validationSteps.put("Password is invalid", user.getPassword() != null && !Pattern.matches(passwordRegex, user.getPassword()));
 
-        for(Map.Entry<String, Boolean> entry : validationSteps.entrySet()){
-            if(entry.getValue()){
+        for (Map.Entry<String, Boolean> entry : validationSteps.entrySet()) {
+            if (entry.getValue()) {
                 errorMessage.append(entry.getKey()).append(" ");
             }
         }
-        if(!errorMessage.isEmpty()){
+        if (!errorMessage.isEmpty()) {
             throw new InvalidInputException(errorMessage.toString().trim());
         }
     }

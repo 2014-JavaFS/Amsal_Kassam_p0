@@ -90,10 +90,10 @@ public class UserServiceTestSuite {
     }
 
     @Test
-    public void testSuccessfulValidation(){
+    public void testSuccessfulAddition(){
         User testUser = new User(1234567, "John", "Doe", "john@doe.com", "Password1");
-        assertDoesNotThrow(() -> {
-            testUserService.validateUser(testUser);
-        });
+        assertDoesNotThrow(() -> assertEquals(testUser, testUserService.create(testUser)));
     }
+
+    
 }

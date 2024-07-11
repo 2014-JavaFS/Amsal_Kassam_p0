@@ -1,8 +1,8 @@
 package com.revature.AKBanking.Accounts;
 
 public class Account {
-    private final int accountNumber;
-    private final int ownerID;
+    private int accountNumber;
+    private int ownerID;
     private int balance;  //in US cents
 
     public Account(int accountNumber, int ownerID, int balance) {
@@ -15,8 +15,16 @@ public class Account {
         return accountNumber;
     }
 
+    public void setAccountNumber(int accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
     public int getOwnerID() {
         return ownerID;
+    }
+
+    public void setOwnerID(int id) {
+        this.ownerID = id;
     }
 
 
@@ -24,8 +32,11 @@ public class Account {
         return balance;
     }
 
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
     /**
-     *
      * @param amount to deposit
      * @return the new balance after deposit
      */
@@ -35,7 +46,6 @@ public class Account {
     }
 
     /**
-     *
      * @param amount to withdraw
      * @return the new balance if withdrawal is successful, null otherwise
      */
