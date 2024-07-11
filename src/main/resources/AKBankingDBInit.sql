@@ -12,3 +12,5 @@ create table users(
 );
 
 insert into users values(1234568, 'John', 'Doe', 'john@doe.com', 'Password1');
+
+select * from users

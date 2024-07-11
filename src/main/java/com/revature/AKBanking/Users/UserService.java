@@ -14,32 +14,32 @@ import java.util.regex.Pattern;
 
 public class UserService implements Serviceable<User> {
     private List<User> users;
+    private UserRepository userRepository;
 
-    public UserService() {
+    public UserService(UserRepository repo) {
         users = new ArrayList<User>();
+        userRepository = repo;
     }
 
     @Override
     public User findById(String id) throws DataNotFoundException {
-        User[] results = users.stream().filter(user -> user.getId() == Integer.parseInt(id))
-                .toArray(User[]::new);
-        if(results.length == 0) {
-            throw new DataNotFoundException(String.format("User with ID: %s not found", id));
-        }
-        return results[0];
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     @Override
     public User create(User newObject) throws InvalidInputException {
         validateUser(newObject);
-        users.add(newObject);
+        userRepository.create(newObject);
         return newObject;
     }
 
     public User findByLoginInfo(String email, String password) {
-        User[] results = users.stream().filter
-                (user -> user.getEmail().equals(email) && user.getPassword().equals(password)).toArray(User[]::new);
-        return results.length > 0 ? results[0] : null;
+        return userRepository.findByLoginInfo(email, password);
     }
 
     public void validateUser(User user) throws InvalidInputException {

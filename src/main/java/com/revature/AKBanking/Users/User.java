@@ -81,4 +81,9 @@ public class User {
     public void setType(userType type){
         this.type = type;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.id == ((User)obj).id;
+    }
 }
