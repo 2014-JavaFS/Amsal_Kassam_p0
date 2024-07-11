@@ -1,5 +1,6 @@
 package com.revature.AKBanking.Users;
 
+import com.revature.AKBanking.util.exceptions.DataNotFoundException;
 import com.revature.AKBanking.util.exceptions.InvalidInputException;
 import com.revature.AKBanking.util.interfaces.Serviceable;
 import com.revature.AKBanking.Users.User;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -20,10 +20,13 @@ public class UserService implements Serviceable<User> {
     }
 
     @Override
-    public User[] findAllWithID(String id) {
+    public User findById(String id) throws DataNotFoundException {
         User[] results = users.stream().filter(user -> user.getId() == Integer.parseInt(id))
                 .toArray(User[]::new);
-        return results.length > 0 ? results : null;
+        if(results.length == 0) {
+            throw new DataNotFoundException(String.format("User with ID: %s not found", id));
+        }
+        return results[0];
     }
 
     @Override

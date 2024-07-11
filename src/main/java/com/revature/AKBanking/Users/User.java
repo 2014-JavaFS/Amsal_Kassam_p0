@@ -6,9 +6,19 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    private userType type;
 
     public enum userType {
-        USER, EMPLOYEE
+        CUSTOMER, EMPLOYEE
+    }
+
+    public User(int id, String firstName,String lastName, String email, String password, userType type){
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.type = type;
     }
 
     public User(int id, String firstName,String lastName, String email, String password){
@@ -17,6 +27,7 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.type = userType.CUSTOMER;
     }
 
     public int getId() {
@@ -61,5 +72,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public userType getType(){
+        return type;
+    }
+
+    public void setType(userType type){
+        this.type = type;
     }
 }

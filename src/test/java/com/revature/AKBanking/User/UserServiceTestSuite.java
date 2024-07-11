@@ -3,9 +3,8 @@ package com.revature.AKBanking.User;
 
 import com.revature.AKBanking.Users.User;
 import com.revature.AKBanking.Users.UserService;
-import com.revature.AKBanking.util.exceptions.InvalidInputException;
+import com.revature.AKBanking.util.exceptions.*;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -95,5 +94,43 @@ public class UserServiceTestSuite {
         assertDoesNotThrow(() -> assertEquals(testUser, testUserService.create(testUser)));
     }
 
-    
+    @Test
+    public void testFindingUserByID(){
+        User testUser = new User(1234567, "John", "Doe", "john@doe.com", "Password1");
+
+        assertDoesNotThrow(() -> testUserService.create(testUser));
+        User searchResult = testUserService.findById(String.valueOf(testUser.getId()));
+
+        assertEquals(testUser, searchResult);
+    }
+
+    @Test
+    public void testFailFindingUserByID(){
+        User testUser = new User(1234567, "John", "Doe", "john@doe.com", "Password1");
+
+        Exception exception = assertThrows(DataNotFoundException.class, () -> {
+                testUserService.findById(String.valueOf(testUser.getId()));
+        });
+        assertEquals(String.format("User with ID: %s not found", testUser.getId()), exception.getMessage());
+    }
+
+    @Test
+    public void testFindingUserByLoginInfo(){
+        User testUser = new User(1234567, "John", "Doe", "john@doe.com", "Password1");
+
+        assertDoesNotThrow(() -> testUserService.create(testUser));
+        User searchResult = testUserService.findByLoginInfo(testUser.getEmail(), testUser.getPassword());
+
+        assertNotNull(searchResult);
+        assertEquals(testUser, searchResult);
+    }
+
+    @Test
+    public void testFailFindingUserByLoginInfo(){
+        User testUser = new User(1234567, "John", "Doe", "john@doe.com", "Password1");
+
+        User searchResult = testUserService.findByLoginInfo(testUser.getEmail(), testUser.getPassword() + "123");
+
+        assertNull(searchResult);
+    }
 }
