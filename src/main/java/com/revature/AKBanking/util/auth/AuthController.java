@@ -42,4 +42,11 @@ public class AuthController {
             return null;
         }
     }
+
+    public User logout(User loggedIn) {
+        if(loggedIn == null){
+            throw new RuntimeException("No User logged in");
+        }
+        return null;
+    }
 }

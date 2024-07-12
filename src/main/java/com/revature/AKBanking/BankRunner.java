@@ -24,36 +24,48 @@ public class BankRunner {
         AuthService authService = new AuthService(userService);
         AuthController authController = new AuthController(scanner, authService);
 
-        User loggedIn = null;
+        User loggedInUser = null;
 
         Integer choice;
         List<String> options;
         do {
-            System.out.println("Welcome to AKBank. How may I help you?");
 
             options = new ArrayList<>();
-            if (loggedIn == null) {
+            boolean currentlyLoggedIn = loggedInUser != null;
+            if (!currentlyLoggedIn) {
+                System.out.println("Welcome to AKBank. How may I help you?");
                 options.add("Login");
             } else {
+                System.out.printf("Welcome back to AKBank %s%n", loggedInUser.getName());
                 options.add("Logout");
                 options.add("Users");
             }
             options.add("Exit");
             for (int i = 0; i < options.size(); i++) {
-                System.out.printf("%d. %s%n", i, options.get(i));
+                System.out.printf("%d. %s%n", i + 1, options.get(i));
             }
             choice = integerLooper.getNext(scanner, String.format("Please enter an integer 1-%d", options.size()));
 
             switch (choice) {
                 case 1: //login/logout
+                    if(currentlyLoggedIn){
+                        loggedInUser = authController.logout(loggedInUser);
+                    } else {
+                        loggedInUser = authController.login(loggedInUser);
+                    }
                     break;
                 case 2: //users
+                    if(!currentlyLoggedIn){
+                        System.out.println("Cannot access User info when logged out");
+                        break;
+                    }
+                    userController.showMenu(loggedInUser);
                     break;
-                case 3: //exit
-                    System.out.println("Thanks for using AKBanking. Have a great day!");
-                    break;
+
             }
 
-        } while (choice != options.size() - 1);
+        } while (choice != options.size());
+
+        System.out.println("Thanks for using AKBanking. Have a great day!");
     }
 }

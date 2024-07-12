@@ -65,7 +65,7 @@ public class UserService implements Crudable<User> {
         validationSteps.put("Email is empty", user.getEmail() == null || user.getEmail().isEmpty());
         validationSteps.put("Password is empty", user.getPassword() == null || user.getPassword().isEmpty());
 
-        validationSteps.put("ID is out of bounds", user.getId() < 1000000 || user.getId() > 9999999); //any 7-digit number
+        validationSteps.put("ID is out of bounds", user.getId() <= 1000000 || user.getId() >= 9999999); //any 7-digit number
 
         String emailRegex = "^[\\w\\.\\-]+@([\\w\\-]+\\.)+\\w{2,}$";
         //email must be of form [a+][@][z+][.zz] where square brackets are required
@@ -73,7 +73,7 @@ public class UserService implements Crudable<User> {
 
         String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,24}";
         //password must contain 1 lowercase, 1 uppercase, 1 number, and be between 8 and 24 characters
-        validationSteps.put("Password is invalid, must contain 1 lowercase character, 1 uppercase character, and 1 number", user.getPassword() != null && !Pattern.matches(passwordRegex, user.getPassword()));
+        validationSteps.put("Password is invalid, must be between 8-24 characters, contain 1 lowercase, 1 uppercase, and 1 number", user.getPassword() != null && !Pattern.matches(passwordRegex, user.getPassword()));
 
         for (Map.Entry<String, Boolean> entry : validationSteps.entrySet()) {
             if (entry.getValue()) {

@@ -1,14 +1,17 @@
 package com.revature.AKBanking.Users;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
+import com.revature.AKBanking.util.interfaces.Controller;
 import com.revature.AKBanking.util.interfaces.Validator;
 import com.revature.AKBanking.util.exceptions.DataNotFoundException;
 import com.revature.AKBanking.util.exceptions.InvalidInputException;
 
 import static com.revature.AKBanking.util.ScannerLooperImpl.*;
 
-public class UserController {
+public class UserController implements Controller<User> {
     private Scanner scanner;
     private final UserService userService;
 
@@ -17,13 +20,69 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Override
+    public void showMenu(User user) {
+        List<String> options = new ArrayList<>();
+
+        if (user.getType() == User.userType.CUSTOMER) {
+            showCustomerMenu(user);
+        }
+        if (user.getType() == User.userType.EMPLOYEE) {
+            showEmployeeMenu(user);
+        }
+    }
+
+    public void showCustomerMenu(User user) {
+        List<String> options = new ArrayList<>();
+
+        options.add("View customer details");
+        options.add("Exit");
+        for(int i = 0; i < options.size(); i++){
+            System.out.printf("%d. %s%n", i + 1, options.get(i));
+        }
+        Integer choice = integerLooper.getNext(scanner, String.format("Please enter an integer 1-%d", options.size()));
+    }
+
+    public void showEmployeeMenu(User user) {
+        List<String> options = new ArrayList<>();
+
+        options.add("View employee details");
+        options.add("View all users");
+        options.add("Create new user");
+        options.add("Update existing user");
+        options.add("Delete existing user");
+        options.add("Exit");
+        for (int i = 0; i < options.size(); i++) {
+            System.out.printf("%d. %s%n", i + 1, options.get(i));
+        }
+        Integer choice = integerLooper.getNext(scanner, String.format("Please enter an integer 1-%d", options.size()));
+
+        switch (choice) {
+            case 1: //view current employee
+                System.out.println(user);
+                break;
+            case 2:
+                this.printUsers();
+                break;
+            case 3:
+                this.createNewUserByID();
+                break;
+            case 4:
+                this.updateUser();
+                break;
+            case 5:
+                this.deleteUser();
+                break;
+        }
+    }
+
     public void printUsers() {
         for (User user : userService.findAll()) {
             System.out.println(user);
         }
     }
 
-    public void createNewUser() {
+    public void createNewUserByID() {
         System.out.println("Please enter new user info");
 
         System.out.print("ID: ");
@@ -156,10 +215,5 @@ public class UserController {
         } catch (DataNotFoundException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        UserController userController = new UserController(new Scanner(System.in), new UserService(new UserRepository()));
-        userController.deleteUser();
     }
 }
