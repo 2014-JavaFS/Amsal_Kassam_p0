@@ -38,7 +38,8 @@ create table transactions(
 insert into users values
     (1234568, 'John', 'Doe', 'john@doe.com', 'Password1'),
     (8529631, 'Bernie', 'Madoff', 'FeelTheBern@madeoff.com', 'InfiniteW341th'),
-    (7854123, 'Richard', 'Nixon', 'theking@whitehouse.gov', 'NotACr00k');
+    (7854123, 'Richard', 'Nixon', 'theking@whitehouse.gov', 'NotACr00k'),
+    (1111111, 'Amsal', 'Kassam', 'redacted@gmail.com', 'UnCr4Ck4B13', 'EMPLOYEE');
 
 select * from users;
 
@@ -48,7 +49,4 @@ select * from currencies;
 
 select * from transactions;
 
-truncate users;
-truncate accounts;
-truncate currencies;
-truncate transactions;
+truncate users, accounts, currencies, transactions;

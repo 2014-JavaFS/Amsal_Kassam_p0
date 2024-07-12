@@ -1,4 +1,4 @@
-package com.revature.AKBanking.util;
+package com.revature.AKBanking.util.interfaces;
 
 import java.util.Scanner;
 

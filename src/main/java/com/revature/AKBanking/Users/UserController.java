@@ -2,52 +2,15 @@ package com.revature.AKBanking.Users;
 
 import java.util.Scanner;
 
-import com.revature.AKBanking.util.ScannerLooper;
-import com.revature.AKBanking.util.Validator;
+import com.revature.AKBanking.util.interfaces.Validator;
 import com.revature.AKBanking.util.exceptions.DataNotFoundException;
 import com.revature.AKBanking.util.exceptions.InvalidInputException;
+
+import static com.revature.AKBanking.util.ScannerLooperImpl.*;
 
 public class UserController {
     private Scanner scanner;
     private final UserService userService;
-
-    ScannerLooper<Integer> integerLooper = (scanner, repeatMessage) -> {
-        String input = scanner.nextLine();
-        while (!input.equalsIgnoreCase("exit") && !input.equalsIgnoreCase("e")) {
-            try {
-                return Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.print(repeatMessage);
-                input = scanner.nextLine();
-            }
-        }
-        return null;
-    };
-
-    ScannerLooper<String> stringLooper = (scanner, repeatMessage) -> {
-        String input = scanner.nextLine();
-        while (!input.equalsIgnoreCase("exit") && !input.equalsIgnoreCase("e")) {
-            if (!input.trim().isEmpty()) {
-                return input;
-            }
-            System.out.print(repeatMessage);
-            input = scanner.nextLine();
-        }
-        return null;
-    };
-
-    ScannerLooper<User.userType> userTypeLooper = (scanner, repeatMessage) -> {
-        String input = scanner.nextLine();
-        while (!input.equalsIgnoreCase("exit") && !input.equalsIgnoreCase("e")) {
-            try {
-                return User.userType.valueOf(input.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                System.out.print(repeatMessage);
-                input = scanner.nextLine();
-            }
-        }
-        return null;
-    };
 
     public UserController(Scanner scanner, UserService userService) {
         this.scanner = scanner;
@@ -192,7 +155,6 @@ public class UserController {
             userService.delete(userToDelete);
         } catch (DataNotFoundException e) {
             System.out.println(e.getMessage());
-            return;
         }
     }
 
