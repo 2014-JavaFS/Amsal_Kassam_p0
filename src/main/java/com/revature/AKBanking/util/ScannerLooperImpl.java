@@ -4,7 +4,7 @@ import com.revature.AKBanking.Users.User;
 import com.revature.AKBanking.util.interfaces.ScannerLooper;
 
 public class ScannerLooperImpl {
-    public static ScannerLooper<Integer> integerLooper = (scanner, repeatMessage) -> {
+    public static ScannerLooper<Integer> integerLooperExit = (scanner, repeatMessage) -> {
         String input = scanner.nextLine();
         while (!input.equalsIgnoreCase("exit") && !input.equalsIgnoreCase("e")) {
             try {
@@ -17,7 +17,19 @@ public class ScannerLooperImpl {
         return null;
     };
 
-    public static ScannerLooper<String> stringLooper = (scanner, repeatMessage) -> {
+    public static ScannerLooper<Integer> integerLooper = (scanner, repeatMessage) -> {
+        String input = scanner.nextLine();
+        while (true) {
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.print(repeatMessage);
+                input = scanner.nextLine();
+            }
+        }
+    };
+
+    public static ScannerLooper<String> stringLooperExit = (scanner, repeatMessage) -> {
         String input = scanner.nextLine();
         while (!input.equalsIgnoreCase("exit") && !input.equalsIgnoreCase("e")) {
             if (!input.trim().isEmpty()) {
@@ -29,7 +41,7 @@ public class ScannerLooperImpl {
         return null;
     };
 
-    public static ScannerLooper<User.userType> userTypeLooper = (scanner, repeatMessage) -> {
+    public static ScannerLooper<User.userType> userTypeLooperExit = (scanner, repeatMessage) -> {
         String input = scanner.nextLine();
         while (!input.equalsIgnoreCase("exit") && !input.equalsIgnoreCase("e")) {
             try {

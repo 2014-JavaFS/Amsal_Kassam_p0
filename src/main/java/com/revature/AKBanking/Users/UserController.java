@@ -27,38 +27,38 @@ public class UserController {
         System.out.println("Please enter new user info");
 
         System.out.print("ID: ");
-        Integer id = integerLooper.getNext(scanner, "Please enter an integer value or (e)xit to quit\nID: ");
+        Integer id = integerLooperExit.getNext(scanner, "Please enter an integer value or (e)xit to quit\nID: ");
         if (id == null) {
             return;
         }
 
         System.out.print("First Name: ");
-        String firstName = stringLooper.getNext(scanner, "Please enter a first name or (e)xit to quit\nFirst Name: ");
+        String firstName = stringLooperExit.getNext(scanner, "Please enter a first name or (e)xit to quit\nFirst Name: ");
         if (firstName == null) {
             return;
         }
 
         System.out.print("Last Name: ");
-        String lastName = stringLooper.getNext(scanner, "Please enter a last name or (e)xit to quit\nLast Name: ");
+        String lastName = stringLooperExit.getNext(scanner, "Please enter a last name or (e)xit to quit\nLast Name: ");
         if (lastName == null) {
             return;
         }
 
         System.out.print("Email: ");
-        String email = stringLooper.getNext(scanner, "Please enter a first name or (e)xit to quit\nEmail: ");
+        String email = stringLooperExit.getNext(scanner, "Please enter a first name or (e)xit to quit\nEmail: ");
         if (email == null) {
             return;
         }
 
 
         System.out.print("Password: ");
-        String password = stringLooper.getNext(scanner, "Please enter a first name or (e)xit to quit\nPassword: ");
+        String password = stringLooperExit.getNext(scanner, "Please enter a first name or (e)xit to quit\nPassword: ");
         if (password == null) {
             return;
         }
 
         System.out.print("User Type (customer or employee): ");
-        User.userType type = userTypeLooper.getNext(scanner, "Please enter customer, employee, or (e)xit to quit\nUser Type: ");
+        User.userType type = userTypeLooperExit.getNext(scanner, "Please enter customer, employee, or (e)xit to quit\nUser Type: ");
         if (type == null) {
             return;
         }
@@ -72,7 +72,7 @@ public class UserController {
 
     public void updateUser() {
         System.out.print("ID of user to update: ");
-        Integer id = integerLooper.getNext(scanner, "Please enter an integer value or (e)xit to quit\nID of user to update: ");
+        Integer id = integerLooperExit.getNext(scanner, "Please enter an integer value or (e)xit to quit\nID of user to update: ");
         if (id == null) {
             return;
         }
@@ -90,7 +90,7 @@ public class UserController {
 
         System.out.println("Current First Name: " + userToUpdate.getFirstName());
         System.out.print("New First Name: ");
-        String firstName = stringLooper.getNext(scanner, "Please enter a first name, (k)eep to leave unchanged, or (e)xit to wuit\nFirst Name: ");
+        String firstName = stringLooperExit.getNext(scanner, "Please enter a first name, (k)eep to leave unchanged, or (e)xit to wuit\nFirst Name: ");
         if (firstName == null) {
             return;
         }
@@ -102,7 +102,7 @@ public class UserController {
 
         System.out.println("Current Last Name: " + userToUpdate.getLastName());
         System.out.print("New Last Name: ");
-        String lastName = stringLooper.getNext(scanner, "Please enter a last , (k)eep to leave unchanged, or (e)xit to quit\nLast Name: ");
+        String lastName = stringLooperExit.getNext(scanner, "Please enter a last , (k)eep to leave unchanged, or (e)xit to quit\nLast Name: ");
         if (lastName == null) {
             return;
         }
@@ -114,7 +114,7 @@ public class UserController {
 
         System.out.println("Current Email: " + userToUpdate.getEmail());
         System.out.print("New Email: ");
-        String email = stringLooper.getNext(scanner, "Please enter an email, (k)eep to leave unchanged, or (e)xit to quit\nEmail: ");
+        String email = stringLooperExit.getNext(scanner, "Please enter an email, (k)eep to leave unchanged, or (e)xit to quit\nEmail: ");
         if (email == null) {
             return;
         }
@@ -126,7 +126,7 @@ public class UserController {
 
 
         System.out.print("New Password: ");
-        String password = stringLooper.getNext(scanner, "Please enter a password, (k)eep to leave unchanged, or (e)xit to quit\nPassword: ");
+        String password = stringLooperExit.getNext(scanner, "Please enter a password, (k)eep to leave unchanged, or (e)xit to quit\nPassword: ");
         if (password == null) {
             return;
         }
@@ -145,7 +145,7 @@ public class UserController {
 
     public void deleteUser() {
         System.out.print("ID of user to delete: ");
-        Integer id = integerLooper.getNext(scanner, "Please enter an integer value or (e)xit to quit\nID of user to delete: ");
+        Integer id = integerLooperExit.getNext(scanner, "Please enter an integer value or (e)xit to quit\nID of user to delete: ");
         if (id == null) {
             return;
         }

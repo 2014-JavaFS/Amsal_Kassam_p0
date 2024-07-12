@@ -25,13 +25,13 @@ public class AuthController {
             }
 
             System.out.print("Email: ");
-            String email = stringLooper.getNext(scanner, "Please enter an email or (e)xit to quit\nEmail: ");
+            String email = stringLooperExit.getNext(scanner, "Please enter an email or (e)xit to quit\nEmail: ");
             if (email == null) {
                 return null;
             }
 
             System.out.print("Password: ");
-            String password = stringLooper.getNext(scanner, "Please enter your password: ");
+            String password = stringLooperExit.getNext(scanner, "Please enter your password: ");
             if (password == null) {
                 return null;
             }
