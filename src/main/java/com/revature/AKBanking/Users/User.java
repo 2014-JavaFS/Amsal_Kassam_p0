@@ -86,4 +86,8 @@ public class User {
     public boolean equals(Object obj) {
         return obj != null && this.id == ((User)obj).id;
     }
+
+    public String toString(){
+        return String.format("%s: %s, %s email:%s", id, firstName, lastName, email, password);
+    }
 }

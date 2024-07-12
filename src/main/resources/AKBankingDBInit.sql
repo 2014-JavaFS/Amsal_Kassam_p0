@@ -35,7 +35,10 @@ create table transactions(
     description varchar(80)
 );
 
-insert into users values(1234568, 'John', 'Doe', 'john@doe.com', 'Password1');
+insert into users values
+    (1234568, 'John', 'Doe', 'john@doe.com', 'Password1'),
+    (8529631, 'Bernie', 'Madoff', 'FeelTheBern@madeoff.com', 'InfiniteW341th'),
+    (7854123, 'Richard', 'Nixon', 'theking@whitehouse.gov', 'NotACr00k');
 
 select * from users;
 
@@ -45,4 +48,7 @@ select * from currencies;
 
 select * from transactions;
 
-truncate users, accounts, currencies, transactions;
+truncate users;
+truncate accounts;
+truncate currencies;
+truncate transactions;

@@ -35,7 +35,7 @@ public class UserRepository implements Crudable<User> {
             System.out.println("Updating User...");
 
             return true;
-        } catch (SQLException | DataNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -56,7 +56,7 @@ public class UserRepository implements Crudable<User> {
             System.out.println("Deleting Users...");
 
             return true;
-        } catch (SQLException | DataNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -79,7 +79,7 @@ public class UserRepository implements Crudable<User> {
             System.out.println("Deleting User...");
 
             return true;
-        } catch (SQLException | DataNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -101,7 +101,7 @@ public class UserRepository implements Crudable<User> {
             }
 
             return generateUserFromResultSet(resultSet);
-        } catch (SQLException | DataNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -123,7 +123,7 @@ public class UserRepository implements Crudable<User> {
             }
 
             return generateUserFromResultSet(resultSet);
-        } catch (SQLException | DataNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }

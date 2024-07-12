@@ -25,7 +25,7 @@ public class UserServiceTestSuite {
     public static void setUpBeforeClass() {
         try {
             userRepository.findById("1234568");
-        } catch(DataNotFoundException e){
+        } catch (DataNotFoundException e) {
             userRepository.create(new User(1234568, "John", "Doe", "john@doe.com", "Password1"));
         }
     }
@@ -98,7 +98,7 @@ public class UserServiceTestSuite {
         Exception exception = assertThrows(InvalidInputException.class, () -> {
             testUserService.validateUser(testUser);
         });
-        assertEquals("Password is invalid", exception.getMessage());
+        assertEquals("Password is invalid, must contain 1 lowercase character, 1 uppercase character, and 1 number", exception.getMessage());
     }
 
     @Test
@@ -122,7 +122,10 @@ public class UserServiceTestSuite {
     public void testFailFindingUserByID() {
         User testUser = new User(1234567, "John", "Doe", "john@doe.com", "Password1");
 
-        assertNull(testUserService.findById(String.valueOf(testUser.getId())));
+        Exception exception = assertThrows(DataNotFoundException.class, () -> {
+            testUserService.findById(String.valueOf(testUser.getId()));
+        });
+        assertEquals(String.format("User with ID: %s not found", testUser.getId()), exception.getMessage());
     }
 
     @Test
@@ -139,9 +142,10 @@ public class UserServiceTestSuite {
     public void testFailFindingUserByLoginInfo() {
         User testUser = new User(1234568, "John", "Doe", "john@doe.com", "Password1");
 
-        User searchResult = testUserService.findByLoginInfo(testUser.getEmail(), testUser.getPassword() + "123");
-
-        assertNull(searchResult);
+        Exception exception = assertThrows(DataNotFoundException.class, () -> {
+            testUserService.findByLoginInfo(testUser.getEmail(), testUser.getPassword() + "123");
+        });
+        assertEquals("Email or password is incorrect", exception.getMessage());
     }
 
     @Test

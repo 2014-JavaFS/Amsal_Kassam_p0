@@ -73,7 +73,7 @@ public class UserService implements Crudable<User> {
 
         String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,24}";
         //password must contain 1 lowercase, 1 uppercase, 1 number, and be between 8 and 24 characters
-        validationSteps.put("Password is invalid", user.getPassword() != null && !Pattern.matches(passwordRegex, user.getPassword()));
+        validationSteps.put("Password is invalid, must contain 1 lowercase character, 1 uppercase character, and 1 number", user.getPassword() != null && !Pattern.matches(passwordRegex, user.getPassword()));
 
         for (Map.Entry<String, Boolean> entry : validationSteps.entrySet()) {
             if (entry.getValue()) {
