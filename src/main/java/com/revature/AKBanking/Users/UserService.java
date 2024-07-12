@@ -2,6 +2,7 @@ package com.revature.AKBanking.Users;
 
 import com.revature.AKBanking.util.exceptions.DataNotFoundException;
 import com.revature.AKBanking.util.exceptions.InvalidInputException;
+import com.revature.AKBanking.util.interfaces.Crudable;
 import com.revature.AKBanking.util.interfaces.Serviceable;
 import com.revature.AKBanking.Users.User;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 
-public class UserService implements Serviceable<User> {
+public class UserService implements Crudable<User> {
     private List<User> users;
     private UserRepository userRepository;
 
@@ -36,6 +37,16 @@ public class UserService implements Serviceable<User> {
         validateUser(newObject);
         userRepository.create(newObject);
         return newObject;
+    }
+
+    @Override
+    public boolean update(User updatedModel) {
+        return userRepository.update(updatedModel);
+    }
+
+    @Override
+    public boolean delete(User modelToDelete) {
+        return userRepository.delete(modelToDelete);
     }
 
     public User findByLoginInfo(String email, String password) {
@@ -73,5 +84,4 @@ public class UserService implements Serviceable<User> {
             throw new InvalidInputException(errorMessage.toString().trim());
         }
     }
-
 }

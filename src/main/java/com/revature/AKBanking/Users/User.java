@@ -84,6 +84,6 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        return this.id == ((User)obj).id;
+        return obj != null && this.id == ((User)obj).id;
     }
 }

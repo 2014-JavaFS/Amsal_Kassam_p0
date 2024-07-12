@@ -15,17 +15,74 @@ import java.util.List;
 public class UserRepository implements Crudable<User> {
     @Override
     public boolean update(User updatedModel) {
-        return false;
+        try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
+
+            String sql = "UPDATE users SET first_name = ?, last_name = ?, email = ?, password = ?, user_type = ?::user_enum WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, updatedModel.getFirstName());
+            preparedStatement.setString(2, updatedModel.getLastName());
+            preparedStatement.setString(3, updatedModel.getEmail());
+            preparedStatement.setString(4, updatedModel.getPassword());
+            preparedStatement.setString(5, updatedModel.getType().toString());
+            preparedStatement.setInt(6, updatedModel.getId());
+
+            boolean updated = preparedStatement.executeUpdate() == 1;
+
+            if(!updated) {
+                throw new DataNotFoundException(String.format("User with ID: %s not found", updatedModel.getId()));
+            }
+            System.out.println("Updating User...");
+
+            return true;
+        } catch (SQLException | DataNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    @Override
+/*    @Override
     public boolean deleteAll() {
-        return false;
-    }
+        try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
+
+            String sql = "DELETE FROM users";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            boolean deleted = preparedStatement.executeUpdate() != 0;
+
+            if(!deleted) {
+                throw new DataNotFoundException("No Users found to delete");
+            }
+            System.out.println("Deleting Users...");
+
+            return true;
+        } catch (SQLException | DataNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }*/
 
     @Override
     public boolean delete(User modelToDelete) {
-        return false;
+        try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
+
+            String sql = "DELETE FROM users WHERE id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, modelToDelete.getId());
+
+            boolean deleted = preparedStatement.executeUpdate() == 1;
+
+            if(!deleted) {
+                throw new DataNotFoundException(String.format("User with ID: %s not found", modelToDelete.getId()));
+            }
+            System.out.println("Deleting User...");
+
+            return true;
+        } catch (SQLException | DataNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -44,7 +101,7 @@ public class UserRepository implements Crudable<User> {
             }
 
             return generateUserFromResultSet(resultSet);
-        } catch (SQLException e) {
+        } catch (SQLException | DataNotFoundException e) {
             e.printStackTrace();
             return null;
         }
@@ -62,7 +119,7 @@ public class UserRepository implements Crudable<User> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(!resultSet.next()) {
-                throw new DataNotFoundException(String.format("User with email: %s not found", email));
+                throw new DataNotFoundException("Email or password is incorrect");
             }
 
             return generateUserFromResultSet(resultSet);
@@ -75,7 +132,7 @@ public class UserRepository implements Crudable<User> {
     @Override
     public User create(User newObject) throws InvalidInputException {
         try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()){
-            String sql = "INSERT INTO users (id, first_name, last_name, email, password, user_type) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO users (id, first_name, last_name, email, password, user_type) VALUES (?, ?, ?, ?, ?, ?::user_enum)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, newObject.getId());

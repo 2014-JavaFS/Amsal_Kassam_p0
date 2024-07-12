@@ -3,13 +3,13 @@ package com.revature.AKBanking.Currency;
 public class Currency {
     private String currencyCode;
     private String currencyName;
-    private float USDExchangeRate;
+    private float ratePerUSD;
     private String currencySymbol;
 
-    public Currency(String currencyCode, String currencyName, float USDExchangeRate, String currencySymbol) {
+    public Currency(String currencyCode, String currencyName, float ratePerUSD, String currencySymbol) {
         this.currencyCode = currencyCode;
         this.currencyName = currencyName;
-        this.USDExchangeRate = USDExchangeRate;
+        this.ratePerUSD = ratePerUSD;
         this.currencySymbol = currencySymbol;
     }
 
@@ -29,12 +29,12 @@ public class Currency {
         this.currencyName = currencyName;
     }
 
-    public float getUSDExchangeRate() {
-        return USDExchangeRate;
+    public float getRatePerUSD() {
+        return ratePerUSD;
     }
 
-    public void setUSDExchangeRate(float USDExchangeRate) {
-        this.USDExchangeRate = USDExchangeRate;
+    public void setRatePerUSD(float ratePerUSD) {
+        this.ratePerUSD = ratePerUSD;
     }
 
     public String getCurrencySymbol() {
