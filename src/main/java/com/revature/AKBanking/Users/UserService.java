@@ -54,7 +54,7 @@ public class UserService implements Crudable<User> {
         }
         StringBuilder errorMessage = new StringBuilder();
         //keys: error messages, values: boolean expressions of validation checks
-        Map<String, Boolean> validationSteps = new LinkedHashMap<String, Boolean>();
+        Map<String, Boolean> validationSteps = new LinkedHashMap<>();
         validationSteps.put("First name is empty", user.getFirstName() == null || user.getFirstName().isEmpty());
         validationSteps.put("Last name is empty", user.getLastName() == null || user.getLastName().isEmpty());
         validationSteps.put("Email is empty", user.getEmail() == null || user.getEmail().isEmpty());

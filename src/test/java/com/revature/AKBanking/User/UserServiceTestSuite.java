@@ -17,7 +17,7 @@ import com.revature.AKBanking.util.exceptions.*;
 
 public class UserServiceTestSuite {
     private UserService testUserService;
-    private static UserRepository userRepository = new UserRepository();
+    private static final UserRepository userRepository = new UserRepository();
 
     @BeforeAll
     public static void setUpBeforeClass() {
@@ -63,10 +63,8 @@ public class UserServiceTestSuite {
     @Test
     public void testEmailNotEmptyValidation() {
         User testUser = new User(1234568, "John", "Doe", null, "Password1");
-        ;
-        Exception exception = assertThrows(InvalidInputException.class, () -> {
-            testUserService.validateUser(testUser);
-        });
+
+        Exception exception = assertThrows(InvalidInputException.class, () -> testUserService.validateUser(testUser));
         assertEquals("Email is empty", exception.getMessage());
     }
 
@@ -83,9 +81,7 @@ public class UserServiceTestSuite {
     @Test
     public void testPasswordNotEmptyValidation() {
         User testUser = new User(1234568, "John", "Doe", "john@doe.com", null);
-        Exception exception = assertThrows(InvalidInputException.class, () -> {
-            testUserService.validateUser(testUser);
-        });
+        Exception exception = assertThrows(InvalidInputException.class, () -> testUserService.validateUser(testUser));
         assertEquals("Password is empty", exception.getMessage());
     }
 
@@ -93,9 +89,7 @@ public class UserServiceTestSuite {
     @ValueSource(strings = {"paSSwoRD", "password1", "PASSWORD1", "abC3", "abcDEF123456789123456789ABCdef"})
     public void testPasswordRegexValidation(String testPassword) {
         User testUser = new User(1234568, "John", "Doe", "john@doe.com", testPassword);
-        Exception exception = assertThrows(InvalidInputException.class, () -> {
-            testUserService.validateUser(testUser);
-        });
+        Exception exception = assertThrows(InvalidInputException.class, () -> testUserService.validateUser(testUser));
         assertEquals("Password is invalid, must be between 8-24 characters, contain 1 lowercase, 1 uppercase, and 1 number", exception.getMessage());
     }
 
@@ -120,9 +114,7 @@ public class UserServiceTestSuite {
     public void testFailFindingUserByID() {
         User testUser = new User(1234567, "John", "Doe", "john@doe.com", "Password1");
 
-        Exception exception = assertThrows(DataNotFoundException.class, () -> {
-            testUserService.findById(String.valueOf(testUser.getId()));
-        });
+        Exception exception = assertThrows(DataNotFoundException.class, () -> testUserService.findById(String.valueOf(testUser.getId())));
         assertEquals(String.format("User with ID: %s not found", testUser.getId()), exception.getMessage());
     }
 
@@ -140,15 +132,7 @@ public class UserServiceTestSuite {
     public void testFailFindingUserByLoginInfo() {
         User testUser = new User(1234568, "John", "Doe", "john@doe.com", "Password1");
 
-        Exception exception = assertThrows(DataNotFoundException.class, () -> {
-            testUserService.findByLoginInfo(testUser.getEmail(), testUser.getPassword() + "123");
-        });
+        Exception exception = assertThrows(DataNotFoundException.class, () -> testUserService.findByLoginInfo(testUser.getEmail(), testUser.getPassword() + "123"));
         assertEquals("Email or password is incorrect", exception.getMessage());
-    }
-
-    @Test
-    public void testUpdatingUser() {
-        User testUser = new User(1234568, "John", "Doe", "john@doe.com", "Password1");
-
     }
 }
