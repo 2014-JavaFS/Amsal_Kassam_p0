@@ -24,6 +24,13 @@ public class UserController implements Controller {
         app.post("/addUser", this::createNewUserByID);
         app.post("/updateUser", this::updateUser);
         app.post("/deleteUser", this::deleteUser);
+        app.get("/allUsers", this::findAll);
+    }
+
+    private void findAll(Context context) {
+        List<User> users = userService.findAll();
+        context.json(users);
+        context.status(200);
     }
 
     public void createNewUserByID(Context context) {
