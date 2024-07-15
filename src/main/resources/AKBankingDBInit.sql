@@ -15,7 +15,7 @@ create table currencies(
     currency_code varchar(3) primary key,
     currency_name varchar(24) not null,
     rate_per_usd double precision not null,
-    currency_symbol varchar(2)
+    currency_symbol varchar(3)
 );
 
 create table accounts(
@@ -41,9 +41,27 @@ insert into users values
     (7854123, 'Richard', 'Nixon', 'theking@whitehouse.gov', 'NotACr00k'),
     (1111111, 'Amsal', 'Kassam', 'redacted@gmail.com', 'UnCr4Ck4B13', 'EMPLOYEE');
 
+insert into accounts values
+    (12345678, 1234568, 10000),
+    (12345679, 1234568, 20000),
+    (74185296, 8529631, 9999999),
+    (94516238, 7854123, 150000);
+
+insert into currencies values
+    ('USD', 'US Dollar', 1, '$'),
+    ('PKR', 'Pakistani Rupee', 278.52, 'Rs.'),
+    ('JPY', 'Japanese Yen', 157.88, '¥'),
+    ('EUR', 'Euro', 0.92, '€'),
+    ('GBP', 'British Pound Sterling', 0.77, '£');
+
+
 select * from users;
 
 select * from accounts;
+
+select * from accounts left join users u on u.id = accounts.owner_id;
+
+drop table currencies;
 
 select * from currencies;
 

@@ -38,7 +38,8 @@ public class UserService implements Crudable<User> {
     }
 
     @Override
-    public boolean update(User updatedModel) {
+    public boolean update(User updatedModel) throws InvalidInputException {
+        validateUser(updatedModel);
         return userRepository.update(updatedModel);
     }
 

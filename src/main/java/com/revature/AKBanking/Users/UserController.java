@@ -4,74 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import io.javalin.Javalin;
+
+import com.revature.AKBanking.util.interfaces.Controller;
 import com.revature.AKBanking.util.interfaces.Validator;
 import com.revature.AKBanking.util.exceptions.DataNotFoundException;
 import com.revature.AKBanking.util.exceptions.InvalidInputException;
+import io.javalin.http.Context;
+import io.javalin.http.HttpStatus;
 
 import static com.revature.AKBanking.util.ScannerLooperImpl.*;
 
-public class UserController {
-    private Scanner scanner;
+public class UserController implements Controller {
     private final UserService userService;
 
-    public UserController(Scanner scanner, UserService userService) {
-        this.scanner = scanner;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    public void showMenu(User user) {
-        List<String> options = new ArrayList<>();
-
-        if (user.getType() == User.userType.CUSTOMER) {
-            showCustomerMenu(user);
-        }
-        if (user.getType() == User.userType.EMPLOYEE) {
-            showEmployeeMenu(user);
-        }
-    }
-
-    public void showCustomerMenu(User user) {
-        List<String> options = new ArrayList<>();
-
-        options.add("View customer details");
-        options.add("Exit");
-        for(int i = 0; i < options.size(); i++){
-            System.out.printf("%d. %s%n", i + 1, options.get(i));
-        }
-        Integer choice = integerLooper.getNext(scanner, String.format("Please enter an integer 1-%d", options.size()));
-    }
-
-    public void showEmployeeMenu(User user) {
-        List<String> options = new ArrayList<>();
-
-        options.add("View employee details");
-        options.add("View all users");
-        options.add("Create new user");
-        options.add("Update existing user");
-        options.add("Delete existing user");
-        options.add("Exit");
-        for (int i = 0; i < options.size(); i++) {
-            System.out.printf("%d. %s%n", i + 1, options.get(i));
-        }
-        Integer choice = integerLooper.getNext(scanner, String.format("Please enter an integer 1-%d", options.size()));
-
-        switch (choice) {
-            case 1: //view current employee
-                System.out.println(user);
-                break;
-            case 2:
-                this.printUsers();
-                break;
-            case 3:
-                this.createNewUserByID();
-                break;
-            case 4:
-                this.updateUser();
-                break;
-            case 5:
-                this.deleteUser();
-                break;
-        }
+    @Override
+    public void registerPaths(Javalin app) {
+        app.post("/addUser", this::createNewUserByID);
+        app.post("/updateUser", this::updateUser);
+        app.post("/deleteUser", this::deleteUser);
     }
 
     public void printUsers() {
@@ -80,137 +35,80 @@ public class UserController {
         }
     }
 
-    public void createNewUserByID() {
-        System.out.println("Please enter new user info");
+    public void createNewUserByID(Context context) {
 
-        System.out.print("ID: ");
-        Integer id = integerLooperExit.getNext(scanner, "Please enter an integer value or (e)xit to quit\nID: ");
-        if (id == null) {
+        int id;
+        User.userType type;
+        try {
+            id = Integer.parseInt(context.queryParam("ID"));
+            type = Enum.valueOf(User.userType.class, context.queryParam("type"));
+        } catch (NumberFormatException | NullPointerException e) {
+            context.status(HttpStatus.PARTIAL_CONTENT);
             return;
         }
 
-        System.out.print("First Name: ");
-        String firstName = stringLooperExit.getNext(scanner, "Please enter a first name or (e)xit to quit\nFirst Name: ");
-        if (firstName == null) {
-            return;
-        }
-
-        System.out.print("Last Name: ");
-        String lastName = stringLooperExit.getNext(scanner, "Please enter a last name or (e)xit to quit\nLast Name: ");
-        if (lastName == null) {
-            return;
-        }
-
-        System.out.print("Email: ");
-        String email = stringLooperExit.getNext(scanner, "Please enter a first name or (e)xit to quit\nEmail: ");
-        if (email == null) {
-            return;
-        }
-
-
-        System.out.print("Password: ");
-        String password = stringLooperExit.getNext(scanner, "Please enter a first name or (e)xit to quit\nPassword: ");
-        if (password == null) {
-            return;
-        }
-
-        System.out.print("User Type (customer or employee): ");
-        User.userType type = userTypeLooperExit.getNext(scanner, "Please enter customer, employee, or (e)xit to quit\nUser Type: ");
-        if (type == null) {
-            return;
-        }
+        String firstName = context.queryParam("firstName");
+        String lastName = context.queryParam("lastName");
+        String email = context.queryParam("email");
+        String password = context.queryParam("password");
 
         try {
-            userService.create(new User(id, firstName, lastName, email, password, type));
+            User newUser = userService.create(new User(id, firstName, lastName, email, password, type));
+            context.header("newUser", newUser.toString());
+            context.status(200);
         } catch (InvalidInputException e) {
+            context.status(HttpStatus.UNPROCESSABLE_CONTENT);
             System.out.println(e.getMessage());
         }
     }
 
-    public void updateUser() {
-        System.out.print("ID of user to update: ");
-        Integer id = integerLooperExit.getNext(scanner, "Please enter an integer value or (e)xit to quit\nID of user to update: ");
-        if (id == null) {
-            return;
-        }
-
+    public void updateUser(Context context) {
+        String id = context.queryParam("ID");
         User userToUpdate;
         try {
-            userToUpdate = userService.findById(String.valueOf(id));
+            userToUpdate = userService.findById(id);
         } catch (DataNotFoundException e) {
+            context.status(HttpStatus.NOT_FOUND);
             System.out.println(e.getMessage());
             return;
         }
-        Validator<String> shouldKeep = (String input) -> {
-            return input.equalsIgnoreCase("keep") || input.equalsIgnoreCase("k");
-        };
-
-        System.out.println("Current First Name: " + userToUpdate.getFirstName());
-        System.out.print("New First Name: ");
-        String firstName = stringLooperExit.getNext(scanner, "Please enter a first name, (k)eep to leave unchanged, or (e)xit to wuit\nFirst Name: ");
-        if (firstName == null) {
-            return;
-        }
-        if (shouldKeep.validate(firstName)) {
-            System.out.println("Keeping First Name: " + userToUpdate.getFirstName());
-        } else {
-            userToUpdate.setFirstName(firstName);
-        }
-
-        System.out.println("Current Last Name: " + userToUpdate.getLastName());
-        System.out.print("New Last Name: ");
-        String lastName = stringLooperExit.getNext(scanner, "Please enter a last , (k)eep to leave unchanged, or (e)xit to quit\nLast Name: ");
-        if (lastName == null) {
-            return;
-        }
-        if (shouldKeep.validate(lastName)) {
-            System.out.println("Keeping Last Name: " + userToUpdate.getLastName());
-        } else {
-            userToUpdate.setLastName(lastName);
-        }
-
-        System.out.println("Current Email: " + userToUpdate.getEmail());
-        System.out.print("New Email: ");
-        String email = stringLooperExit.getNext(scanner, "Please enter an email, (k)eep to leave unchanged, or (e)xit to quit\nEmail: ");
-        if (email == null) {
-            return;
-        }
-        if (shouldKeep.validate(email)) {
-            System.out.println("Keeping Email: " + userToUpdate.getEmail());
-        } else {
-            userToUpdate.setEmail(email);
-        }
 
 
-        System.out.print("New Password: ");
-        String password = stringLooperExit.getNext(scanner, "Please enter a password, (k)eep to leave unchanged, or (e)xit to quit\nPassword: ");
-        if (password == null) {
-            return;
-        }
-        if (shouldKeep.validate(password)) {
-            System.out.println("Keeping Password");
-        } else {
-            userToUpdate.setPassword(password);
-        }
+        String firstName = context.queryParam("firstName");
+        firstName = firstName == null ? userToUpdate.getFirstName() : firstName;
+        String lastName = context.queryParam("lastName");
+        lastName = lastName == null ? userToUpdate.getLastName() : lastName;
+        String email = context.queryParam("email");
+        email = email == null ? userToUpdate.getEmail() : email;
+        String password = context.queryParam("password");
+        password = password == null ? userToUpdate.getPassword() : password;
+        String userType = context.queryParam("type");
+        userType = userType == null ? userToUpdate.getType().name() : userType;
 
         try {
+            User.userType type = Enum.valueOf(User.userType.class, userType);
+            userToUpdate = new User(Integer.parseInt(id), firstName, lastName, email, password, type);
             userService.update(userToUpdate);
-        } catch (DataNotFoundException e) {
+            context.header("updatedUser", userToUpdate.toString());
+            context.status(200);
+        } catch (NumberFormatException | NullPointerException e) {
+            context.status(HttpStatus.PARTIAL_CONTENT);
+            System.out.println(e.getMessage());
+        } catch (InvalidInputException e) {
+            context.status(HttpStatus.UNPROCESSABLE_CONTENT);
             System.out.println(e.getMessage());
         }
     }
 
-    public void deleteUser() {
-        System.out.print("ID of user to delete: ");
-        Integer id = integerLooperExit.getNext(scanner, "Please enter an integer value or (e)xit to quit\nID of user to delete: ");
-        if (id == null) {
-            return;
-        }
-
+    public void deleteUser(Context context) {
         try {
-            User userToDelete = userService.findById(String.valueOf(id));
+            String id = context.queryParam("ID");
+            User userToDelete = userService.findById(id);
             userService.delete(userToDelete);
-        } catch (DataNotFoundException e) {
+            context.header("deletedUser", userToDelete.toString());
+            context.status(200);
+        } catch (DataNotFoundException | NumberFormatException e) {
+            context.status(HttpStatus.NOT_FOUND);
             System.out.println(e.getMessage());
         }
     }

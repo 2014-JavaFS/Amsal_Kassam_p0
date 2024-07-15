@@ -37,8 +37,8 @@ public class AuthController implements Controller {
 
         try {
             User user = authService.login(email, password);
-            ctx.header("memberId", String.valueOf(user.getId()));
-            ctx.header("memberType", user.getType().name());
+            ctx.header("userID", String.valueOf(user.getId()));
+            ctx.header("userType", user.getType().name());
             ctx.status(200);
         } catch (AuthenticationException e) {
             ctx.status(HttpStatus.UNAUTHORIZED);

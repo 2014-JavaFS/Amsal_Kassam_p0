@@ -25,10 +25,12 @@ public class BankRunner {
 
         UserRepository userRepository = new UserRepository();
         UserService userService = new UserService(userRepository);
-        UserController userController = new UserController(scanner, userService);
+        UserController userController = new UserController(userService);
+        userController.registerPaths(app);
 
         AuthService authService = new AuthService(userService);
         AuthController authController = new AuthController(authService);
+        authController.registerPaths(app);
 
         User loggedInUser = null;
 
