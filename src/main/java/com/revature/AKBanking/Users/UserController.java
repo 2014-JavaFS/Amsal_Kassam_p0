@@ -1,8 +1,6 @@
 package com.revature.AKBanking.Users;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import io.javalin.Javalin;
 

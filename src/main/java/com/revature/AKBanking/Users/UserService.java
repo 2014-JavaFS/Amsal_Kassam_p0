@@ -1,17 +1,13 @@
 package com.revature.AKBanking.Users;
 
-import com.revature.AKBanking.util.exceptions.DataNotFoundException;
-import com.revature.AKBanking.util.exceptions.InvalidInputException;
-import com.revature.AKBanking.util.interfaces.Crudable;
-import com.revature.AKBanking.util.interfaces.Serviceable;
-import com.revature.AKBanking.Users.User;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import com.revature.AKBanking.util.exceptions.DataNotFoundException;
+import com.revature.AKBanking.util.exceptions.InvalidInputException;
+import com.revature.AKBanking.util.interfaces.Crudable;
 
 public class UserService implements Crudable<User> {
     private final UserRepository userRepository;

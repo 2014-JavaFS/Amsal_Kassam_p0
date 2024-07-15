@@ -1,16 +1,16 @@
 package com.revature.AKBanking.Users;
 
-import com.revature.AKBanking.util.exceptions.DataNotFoundException;
-import com.revature.AKBanking.util.exceptions.InvalidInputException;
-import com.revature.AKBanking.util.interfaces.Crudable;
-import com.revature.AKBanking.util.ConnectionFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.revature.AKBanking.util.exceptions.DataNotFoundException;
+import com.revature.AKBanking.util.exceptions.InvalidInputException;
+import com.revature.AKBanking.util.interfaces.Crudable;
+import com.revature.AKBanking.util.ConnectionFactory;
 
 public class UserRepository implements Crudable<User> {
     @Override

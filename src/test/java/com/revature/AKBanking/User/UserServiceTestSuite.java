@@ -1,18 +1,16 @@
 package com.revature.AKBanking.User;
 
-
-import com.revature.AKBanking.Users.User;
-import com.revature.AKBanking.Users.UserRepository;
-import com.revature.AKBanking.Users.UserService;
-import com.revature.AKBanking.util.exceptions.*;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.revature.AKBanking.Users.User;
+import com.revature.AKBanking.Users.UserRepository;
+import com.revature.AKBanking.Users.UserService;
+import com.revature.AKBanking.util.exceptions.*;
 
 // valid user declaration for copy/pasting
 // new User(1234567, "John", "Doe", "john@doe.com", "Password1")
