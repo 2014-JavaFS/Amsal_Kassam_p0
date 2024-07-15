@@ -7,13 +7,10 @@ import java.util.Scanner;
 import io.javalin.Javalin;
 
 import com.revature.AKBanking.util.interfaces.Controller;
-import com.revature.AKBanking.util.interfaces.Validator;
 import com.revature.AKBanking.util.exceptions.DataNotFoundException;
 import com.revature.AKBanking.util.exceptions.InvalidInputException;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
-
-import static com.revature.AKBanking.util.ScannerLooperImpl.*;
 
 public class UserController implements Controller {
     private final UserService userService;
@@ -27,12 +24,6 @@ public class UserController implements Controller {
         app.post("/addUser", this::createNewUserByID);
         app.post("/updateUser", this::updateUser);
         app.post("/deleteUser", this::deleteUser);
-    }
-
-    public void printUsers() {
-        for (User user : userService.findAll()) {
-            System.out.println(user);
-        }
     }
 
     public void createNewUserByID(Context context) {

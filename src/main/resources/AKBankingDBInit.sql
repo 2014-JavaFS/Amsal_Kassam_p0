@@ -54,14 +54,11 @@ insert into currencies values
     ('EUR', 'Euro', 0.92, '€'),
     ('GBP', 'British Pound Sterling', 0.77, '£');
 
-
 select * from users;
 
 select * from accounts;
 
 select * from accounts left join users u on u.id = accounts.owner_id;
-
-drop table currencies;
 
 select * from currencies;
 

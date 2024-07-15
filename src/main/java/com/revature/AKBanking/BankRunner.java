@@ -9,10 +9,6 @@ import com.revature.AKBanking.util.auth.AuthService;
 import io.javalin.Javalin;
 import io.javalin.json.JavalinJackson;
 
-import static com.revature.AKBanking.util.ScannerLooperImpl.*;
-
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BankRunner {
