@@ -14,11 +14,9 @@ import java.util.regex.Pattern;
 
 
 public class UserService implements Crudable<User> {
-    private List<User> users;
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository repo) {
-        users = new ArrayList<User>();
         userRepository = repo;
     }
 

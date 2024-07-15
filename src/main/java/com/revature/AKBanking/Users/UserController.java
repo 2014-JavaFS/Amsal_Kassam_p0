@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.revature.AKBanking.util.interfaces.Controller;
 import com.revature.AKBanking.util.interfaces.Validator;
 import com.revature.AKBanking.util.exceptions.DataNotFoundException;
 import com.revature.AKBanking.util.exceptions.InvalidInputException;
 
 import static com.revature.AKBanking.util.ScannerLooperImpl.*;
 
-public class UserController implements Controller<User> {
+public class UserController {
     private Scanner scanner;
     private final UserService userService;
 
@@ -20,7 +19,6 @@ public class UserController implements Controller<User> {
         this.userService = userService;
     }
 
-    @Override
     public void showMenu(User user) {
         List<String> options = new ArrayList<>();
 

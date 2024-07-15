@@ -13,5 +13,5 @@ public class ConnectionFactoryTestSuite {
     public void testValidConnection(){
         Connection connection = assertDoesNotThrow(() -> ConnectionFactory.getConnectionFactory().getConnection());
         assertNotNull(connection);
-    }
+   }
 }

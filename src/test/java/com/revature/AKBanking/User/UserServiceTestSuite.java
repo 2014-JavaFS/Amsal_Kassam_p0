@@ -98,7 +98,7 @@ public class UserServiceTestSuite {
         Exception exception = assertThrows(InvalidInputException.class, () -> {
             testUserService.validateUser(testUser);
         });
-        assertEquals("Password is invalid, must contain 1 lowercase character, 1 uppercase character, and 1 number", exception.getMessage());
+        assertEquals("Password is invalid, must be between 8-24 characters, contain 1 lowercase, 1 uppercase, and 1 number", exception.getMessage());
     }
 
     @Test

@@ -2,51 +2,46 @@ package com.revature.AKBanking.util.auth;
 
 import com.revature.AKBanking.Users.User;
 import com.revature.AKBanking.util.exceptions.DataNotFoundException;
+import static com.revature.AKBanking.util.ScannerLooperImpl.*;
+import com.revature.AKBanking.util.interfaces.Controller;
+
+import io.javalin.Javalin;
+import io.javalin.http.Context;
+import io.javalin.http.HttpStatus;
 
 import javax.security.sasl.AuthenticationException;
-
-import static com.revature.AKBanking.util.ScannerLooperImpl.*;
+import java.lang.management.MemoryManagerMXBean;
 
 import java.util.Scanner;
 
-public class AuthController {
-    private final Scanner scanner;
+public class AuthController implements Controller {
     private final AuthService authService;
 
-    public AuthController(Scanner scanner, AuthService authService) {
-        this.scanner = scanner;
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
-    public User login(User loggedIn) {
-        try {
-            if(loggedIn != null){
-                throw new RuntimeException("Already logged in");
-            }
-
-            System.out.print("Email: ");
-            String email = stringLooperExit.getNext(scanner, "Please enter an email or (e)xit to quit\nEmail: ");
-            if (email == null) {
-                return null;
-            }
-
-            System.out.print("Password: ");
-            String password = stringLooperExit.getNext(scanner, "Please enter your password: ");
-            if (password == null) {
-                return null;
-            }
-
-            return authService.login(email, password);
-        } catch (AuthenticationException | DataNotFoundException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+    @Override
+    public void registerPaths(Javalin app) {
+        app.post("/login", this::postLogin);
+        app.get("/user-info", this::getRedirect);
     }
 
-    public User logout(User loggedIn) {
-        if(loggedIn == null){
-            throw new RuntimeException("No User logged in");
+    private void getRedirect(Context ctx){
+        ctx.redirect("https://i.pinimg.com/736x/6a/6d/11/6a6d1124cf69e5588588bc7e397598f6.jpg");
+    }
+
+    private void postLogin(Context ctx) {
+        String email = ctx.queryParam("email");
+        String password = ctx.queryParam("password");
+
+        try {
+            User user = authService.login(email, password);
+            ctx.header("memberId", String.valueOf(user.getId()));
+            ctx.header("memberType", user.getType().name());
+            ctx.status(200);
+        } catch (AuthenticationException e) {
+            ctx.status(HttpStatus.UNAUTHORIZED);
         }
-        return null;
     }
 }

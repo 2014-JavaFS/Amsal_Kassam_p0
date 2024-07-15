@@ -6,6 +6,8 @@ import com.revature.AKBanking.Users.UserRepository;
 import com.revature.AKBanking.Users.UserService;
 import com.revature.AKBanking.util.auth.AuthController;
 import com.revature.AKBanking.util.auth.AuthService;
+import io.javalin.Javalin;
+import io.javalin.json.JavalinJackson;
 
 import static com.revature.AKBanking.util.ScannerLooperImpl.*;
 
@@ -17,55 +19,19 @@ public class BankRunner {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        Javalin app = Javalin.create(config -> {
+            config.jsonMapper(new JavalinJackson());
+        });
+
         UserRepository userRepository = new UserRepository();
         UserService userService = new UserService(userRepository);
         UserController userController = new UserController(scanner, userService);
 
         AuthService authService = new AuthService(userService);
-        AuthController authController = new AuthController(scanner, authService);
+        AuthController authController = new AuthController(authService);
 
         User loggedInUser = null;
 
-        Integer choice;
-        List<String> options;
-        do {
-
-            options = new ArrayList<>();
-            boolean currentlyLoggedIn = loggedInUser != null;
-            if (!currentlyLoggedIn) {
-                System.out.println("Welcome to AKBank. How may I help you?");
-                options.add("Login");
-            } else {
-                System.out.printf("Welcome back to AKBank %s%n", loggedInUser.getName());
-                options.add("Logout");
-                options.add("Users");
-            }
-            options.add("Exit");
-            for (int i = 0; i < options.size(); i++) {
-                System.out.printf("%d. %s%n", i + 1, options.get(i));
-            }
-            choice = integerLooper.getNext(scanner, String.format("Please enter an integer 1-%d", options.size()));
-
-            switch (choice) {
-                case 1: //login/logout
-                    if(currentlyLoggedIn){
-                        loggedInUser = authController.logout(loggedInUser);
-                    } else {
-                        loggedInUser = authController.login(loggedInUser);
-                    }
-                    break;
-                case 2: //users
-                    if(!currentlyLoggedIn){
-                        System.out.println("Cannot access User info when logged out");
-                        break;
-                    }
-                    userController.showMenu(loggedInUser);
-                    break;
-
-            }
-
-        } while (choice != options.size());
-
-        System.out.println("Thanks for using AKBanking. Have a great day!");
+        app.start(8080);
     }
 }
