@@ -66,7 +66,7 @@ public class AccountService implements Crudable<Account> {
         return account.getBalance();
     }
 
-    public boolean withdraw(Account account, int amount) throws InvalidInputException {
+    public int withdraw(Account account, int amount) throws InvalidInputException {
         validateAccount(account);
         if(amount <= 0){
             throw new InvalidInputException("Amount must be greater than 0");
@@ -76,6 +76,7 @@ public class AccountService implements Crudable<Account> {
         }
 
         account.setBalance(account.getBalance() - amount);
-        return this.update(account);
+        this.update(account);
+        return account.getBalance();
     }
 }

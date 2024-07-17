@@ -32,7 +32,6 @@ public class UserController implements Controller {
     }
 
     private void findAll(Context context) {
-
         if(!isEmployee.validate(context)){
             context.status(HttpStatus.UNAUTHORIZED);
             context.result("You are not authorized to view this page");
