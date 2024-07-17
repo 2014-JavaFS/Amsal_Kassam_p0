@@ -4,6 +4,7 @@ import com.revature.AKBanking.util.exceptions.DataNotFoundException;
 import com.revature.AKBanking.util.exceptions.InvalidInputException;
 import com.revature.AKBanking.util.interfaces.Crudable;
 import com.revature.AKBanking.util.interfaces.Serviceable;
+import com.revature.AKBanking.util.interfaces.Validator;
 
 import java.util.List;
 
@@ -53,5 +54,28 @@ public class AccountService implements Crudable<Account> {
             throw new InvalidInputException("Negative balance");
         }
 
+    }
+
+    public int deposit(Account account, int amount) throws InvalidInputException {
+        validateAccount(account);
+        if(amount <= 0){
+            throw new InvalidInputException("Amount must be greater than 0");
+        }
+        account.setBalance(account.getBalance() + amount);
+        this.update(account);
+        return account.getBalance();
+    }
+
+    public boolean withdraw(Account account, int amount) throws InvalidInputException {
+        validateAccount(account);
+        if(amount <= 0){
+            throw new InvalidInputException("Amount must be greater than 0");
+        }
+        if(account.getBalance() < amount){
+            throw new InvalidInputException("Withdrawal amount is greater than balance");
+        }
+
+        account.setBalance(account.getBalance() - amount);
+        return this.update(account);
     }
 }

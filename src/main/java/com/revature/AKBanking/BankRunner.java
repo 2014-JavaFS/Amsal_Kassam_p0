@@ -1,5 +1,8 @@
 package com.revature.AKBanking;
 
+import com.revature.AKBanking.Accounts.AccountController;
+import com.revature.AKBanking.Accounts.AccountRepository;
+import com.revature.AKBanking.Accounts.AccountService;
 import com.revature.AKBanking.Users.User;
 import com.revature.AKBanking.Users.UserController;
 import com.revature.AKBanking.Users.UserRepository;
@@ -8,8 +11,6 @@ import com.revature.AKBanking.util.auth.AuthController;
 import com.revature.AKBanking.util.auth.AuthService;
 import io.javalin.Javalin;
 import io.javalin.json.JavalinJackson;
-
-import java.util.Scanner;
 
 public class BankRunner {
     public static void main(String[] args) {
@@ -21,6 +22,11 @@ public class BankRunner {
         UserService userService = new UserService(userRepository);
         UserController userController = new UserController(userService);
         userController.registerPaths(app);
+
+        AccountRepository accountRepository = new AccountRepository();
+        AccountService accountService = new AccountService(accountRepository);
+        AccountController accountController = new AccountController(accountService);
+        accountController.registerPaths(app);
 
         AuthService authService = new AuthService(userService);
         AuthController authController = new AuthController(authService);

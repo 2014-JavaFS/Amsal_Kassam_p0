@@ -40,7 +40,7 @@ public class UserController implements Controller {
         }
         List<User> users = userService.findAll();
         context.json(users);
-        context.status(200);
+        context.status(HttpStatus.OK);
     }
 
     public void createNewUser(Context context) {
@@ -69,7 +69,7 @@ public class UserController implements Controller {
         try {
             User newUser = userService.create(new User(id, firstName, lastName, email, password, type));
             context.result("new User created: " + newUser.toString());
-            context.status(200);
+            context.status(HttpStatus.CREATED);
         } catch (InvalidInputException e) {
             context.status(HttpStatus.UNPROCESSABLE_CONTENT);
             context.result(e.getMessage());
@@ -104,7 +104,7 @@ public class UserController implements Controller {
             userToUpdate = new User(Integer.parseInt(id), firstName, lastName, email, password, type);
             userService.update(userToUpdate);
             context.header("updatedUser", userToUpdate.toString());
-            context.status(200);
+            context.status(HttpStatus.OK);
         } catch (NumberFormatException | NullPointerException e) {
             context.status(HttpStatus.PARTIAL_CONTENT);
             System.out.println(e.getMessage());
@@ -125,7 +125,7 @@ public class UserController implements Controller {
             User userToDelete = userService.findById(id);
             userService.delete(userToDelete);
             context.header("deletedUser", userToDelete.toString());
-            context.status(200);
+            context.status(HttpStatus.OK);
         } catch (DataNotFoundException | NumberFormatException e) {
             context.status(HttpStatus.NOT_FOUND);
             System.out.println(e.getMessage());
