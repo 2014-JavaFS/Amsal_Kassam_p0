@@ -36,24 +36,7 @@ public class Account {
         this.balance = balance;
     }
 
-    /**
-     * @param amount to deposit
-     * @return the new balance after deposit
-     */
-    public Integer deposit(int amount) {
-        balance += amount;
-        return balance;
-    }
-
-    /**
-     * @param amount to withdraw
-     * @return the new balance if withdrawal is successful, null otherwise
-     */
-    public Integer withdraw(int amount) {
-        if (amount > balance) {
-            return null;
-        }
-        balance -= amount;
-        return balance;
+    public String toString(){
+        return String.format("acc#: %s owner: %s balance: %d", accountNumber, ownerID, balance);
     }
 }

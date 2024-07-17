@@ -13,8 +13,6 @@ import java.util.Scanner;
 
 public class BankRunner {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
         Javalin app = Javalin.create(config -> {
             config.jsonMapper(new JavalinJackson());
         });

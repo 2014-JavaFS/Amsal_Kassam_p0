@@ -128,7 +128,6 @@ public class UserRepository implements Crudable<User> {
             return null;
         }
     }
-
     @Override
     public User create(User newObject) throws InvalidInputException {
         try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()){

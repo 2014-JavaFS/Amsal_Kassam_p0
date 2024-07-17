@@ -2,6 +2,7 @@ package com.revature.AKBanking.Users;
 
 import java.util.List;
 
+import com.revature.AKBanking.util.interfaces.Validator;
 import io.javalin.Javalin;
 
 import com.revature.AKBanking.util.interfaces.Controller;
@@ -17,21 +18,32 @@ public class UserController implements Controller {
         this.userService = userService;
     }
 
+    Validator<Context> isEmployee = (Context context) -> {
+        String userType = context.header("userType");
+        return !(userType == null || userType.isEmpty() || userType.equals(User.userType.CUSTOMER.name()));
+    };
+
     @Override
     public void registerPaths(Javalin app) {
-        app.post("/addUser", this::createNewUserByID);
+        app.post("/addUser", this::createNewUser);
         app.post("/updateUser", this::updateUser);
         app.post("/deleteUser", this::deleteUser);
         app.get("/allUsers", this::findAll);
     }
 
     private void findAll(Context context) {
+
+        if(!isEmployee.validate(context)){
+            context.status(HttpStatus.UNAUTHORIZED);
+            context.result("You are not authorized to view this page");
+            return;
+        }
         List<User> users = userService.findAll();
         context.json(users);
         context.status(200);
     }
 
-    public void createNewUserByID(Context context) {
+    public void createNewUser(Context context) {
 
         int id;
         User.userType type;
@@ -43,6 +55,12 @@ public class UserController implements Controller {
             return;
         }
 
+        if(type == User.userType.EMPLOYEE && !isEmployee.validate(context)){//only employees can create new employees
+            context.status(HttpStatus.UNAUTHORIZED);
+            context.result("You are not authorized to create a new employee");
+            return;
+        }
+
         String firstName = context.queryParam("firstName");
         String lastName = context.queryParam("lastName");
         String email = context.queryParam("email");
@@ -50,11 +68,11 @@ public class UserController implements Controller {
 
         try {
             User newUser = userService.create(new User(id, firstName, lastName, email, password, type));
-            context.header("newUser", newUser.toString());
+            context.result("new User created: " + newUser.toString());
             context.status(200);
         } catch (InvalidInputException e) {
             context.status(HttpStatus.UNPROCESSABLE_CONTENT);
-            System.out.println(e.getMessage());
+            context.result(e.getMessage());
         }
     }
 
@@ -97,6 +115,11 @@ public class UserController implements Controller {
     }
 
     public void deleteUser(Context context) {
+        if(!isEmployee.validate(context)){
+            context.status(HttpStatus.UNAUTHORIZED);
+            context.result("You are not authorized to delete users");
+            return;
+        }
         try {
             String id = context.queryParam("ID");
             User userToDelete = userService.findById(id);

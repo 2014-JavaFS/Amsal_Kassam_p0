@@ -29,8 +29,7 @@ public class UserService implements Crudable<User> {
     @Override
     public User create(User newObject) throws InvalidInputException {
         validateUser(newObject);
-        userRepository.create(newObject);
-        return newObject;
+        return userRepository.create(newObject);
     }
 
     @Override
