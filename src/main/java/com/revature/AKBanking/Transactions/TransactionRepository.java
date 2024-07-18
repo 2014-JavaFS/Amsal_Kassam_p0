@@ -155,8 +155,8 @@ public class TransactionRepository implements Crudable<Transaction> {
     }
 
     private Transaction generateTransactionFromResultSet(ResultSet results) throws SQLException {
-        int id = results.getInt("transactionID");
-        int accountNumber = results.getInt("accountID");
+        int id = results.getInt("transaction_id");
+        int accountNumber = results.getInt("account_id");
         int amount = results.getInt("amount");
         boolean credit = results.getBoolean("credit");
         String description = results.getString("description");

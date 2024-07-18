@@ -3,6 +3,9 @@ package com.revature.AKBanking;
 import com.revature.AKBanking.Accounts.AccountController;
 import com.revature.AKBanking.Accounts.AccountRepository;
 import com.revature.AKBanking.Accounts.AccountService;
+import com.revature.AKBanking.Transactions.TransactionController;
+import com.revature.AKBanking.Transactions.TransactionRepository;
+import com.revature.AKBanking.Transactions.TransactionService;
 import com.revature.AKBanking.Users.User;
 import com.revature.AKBanking.Users.UserController;
 import com.revature.AKBanking.Users.UserRepository;
@@ -32,7 +35,11 @@ public class BankRunner {
         AuthController authController = new AuthController(authService);
         authController.registerPaths(app);
 
-        User loggedInUser = null;
+        TransactionRepository transactionRepository = new TransactionRepository();
+        TransactionService transactionService = new TransactionService(transactionRepository);
+        transactionService.setAccountService(accountService);
+        TransactionController transactionController = new TransactionController(transactionService);
+        transactionController.registerPaths(app);
 
         app.start(8080);
     }

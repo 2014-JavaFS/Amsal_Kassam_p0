@@ -1,4 +1,7 @@
 drop table users;
+drop table accounts;
+drop table transactions;
+drop table currencies;
 
 create type user_enum as enum ('CUSTOMER', 'EMPLOYEE');
 
@@ -22,7 +25,7 @@ create table currencies
 
 create table accounts
 (
-    account_number integer check (account_number > 10000000 and account_number < 99999999), /*8 digit code*/
+    account_number integer primary key check (account_number > 10000000 and account_number < 99999999), /*8 digit code*/
     owner_id       integer,
     balance        integer check (balance >= 0) not null,
     constraint owner_id
@@ -38,7 +41,7 @@ create table transactions
     credit         boolean not null,
     description    varchar(80),
     constraint account_id
-        foreign key (account_id) references users (id)
+        foreign key (account_id) references accounts (account_number)
             on delete cascade
 );
 
@@ -63,9 +66,9 @@ values ('USD', 'US Dollar', 1, '$'),
        ('GBP', 'British Pound Sterling', 0.77, '£');
 
 insert into transactions
-values (123456789, 1234568, 100, true, 'John Doe deposits $1 in cash'),
-       (987654321, 1234568, 100, false, 'Charge of $1 from CoffeeShop'),
-       (111111111, 1111111, 100000, true, 'Payroll - Amsal Kassam');
+values (123456789, 12345678, 100, true, 'John Doe deposits $1 in cash'),
+       (987654321, 12345678, 100, false, 'Charge of $1 from CoffeeShop'),
+       (111111111, 11111111, 100000, true, 'Payroll - Amsal Kassam');
 
 select *
 from users;
