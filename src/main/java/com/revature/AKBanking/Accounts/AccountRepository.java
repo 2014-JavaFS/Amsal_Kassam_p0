@@ -51,7 +51,7 @@ public class AccountRepository implements Crudable<Account> {
             boolean deleted = preparedStatement.executeUpdate() == 1;
 
             if(!deleted) {
-                throw new DataNotFoundException(String.format("User with ID: %s not found", modelToDelete.getAccountNumber()));
+                throw new DataNotFoundException(String.format("Account with ID: %s not found", modelToDelete.getAccountNumber()));
             }
             System.out.println("Deleting Account...");
 
@@ -74,7 +74,7 @@ public class AccountRepository implements Crudable<Account> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if(!resultSet.next()) {
-                throw new DataNotFoundException(String.format("User with ID: %s not found", id));
+                throw new DataNotFoundException(String.format("Account with ID: %s not found", id));
             }
 
             return generateAccountFromResultSet(resultSet);
