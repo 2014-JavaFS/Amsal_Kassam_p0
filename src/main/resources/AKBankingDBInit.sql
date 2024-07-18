@@ -1,7 +1,6 @@
 drop table users;
 drop table accounts;
 drop table transactions;
-drop table currencies;
 
 create type user_enum as enum ('CUSTOMER', 'EMPLOYEE');
 
@@ -13,14 +12,6 @@ create table users
     email      varchar(50) unique not null,
     password   varchar(24)        not null,
     user_type  user_enum default 'CUSTOMER'
-);
-
-create table currencies
-(
-    currency_code   varchar(3) primary key,
-    currency_name   varchar(24)      not null,
-    rate_per_usd    double precision not null,
-    currency_symbol varchar(3)
 );
 
 create table accounts
@@ -58,13 +49,6 @@ values (12345678, 1234568, 10000),
        (94516238, 7854123, 150000),
        (11111111, 1111111, 1000000000);
 
-insert into currencies
-values ('USD', 'US Dollar', 1, '$'),
-       ('PKR', 'Pakistani Rupee', 278.52, 'Rs.'),
-       ('JPY', 'Japanese Yen', 157.88, '¥'),
-       ('EUR', 'Euro', 0.92, '€'),
-       ('GBP', 'British Pound Sterling', 0.77, '£');
-
 insert into transactions
 values (123456789, 12345678, 100, true, 'John Doe deposits $1 in cash'),
        (987654321, 12345678, 100, false, 'Charge of $1 from CoffeeShop'),
@@ -81,11 +65,6 @@ from accounts
          left join users u on u.id = accounts.owner_id;
 
 select *
-from currencies;
-
-select *
 from transactions;
 
-truncate users, accounts, currencies, transactions;
-
-drop table transactions;
+truncate users, accounts, transactions;

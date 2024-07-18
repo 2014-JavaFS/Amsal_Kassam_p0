@@ -4,26 +4,24 @@ import com.revature.AKBanking.Users.User;
 import com.revature.AKBanking.util.exceptions.DataNotFoundException;
 import com.revature.AKBanking.util.exceptions.InvalidInputException;
 import com.revature.AKBanking.util.interfaces.Controller;
+import static com.revature.AKBanking.util.ValidatorImpl.*;
+
 import com.revature.AKBanking.util.interfaces.Validator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
-import java.sql.SQLException;
 
 public class AccountController implements Controller {
     private AccountService accountService = null;
+
     Validator<Context> isEmployeeOrAccountOwner = (Context context) -> {
         return (context.header("userID") != null && context.header("userType") != null)  //null checking
                 && (context.header("userType").equals(User.userType.EMPLOYEE.name()) ||  //either user is an employee
                 (accountService.findById(context.queryParam("accountNumber")).getOwnerID() == Integer.parseInt(context.header("userID"))));
-                //or the owner of the account
+        //or the owner of the account
     };
 
-    Validator<Context> isEmployee = (Context context) -> {
-        String userType = context.header("userType");
-        return !(userType == null || userType.isEmpty() || userType.equals(User.userType.CUSTOMER.name()));
-    };
 
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
@@ -34,8 +32,7 @@ public class AccountController implements Controller {
         app.post("/createAccount", this::createNewAccount);
         app.get("/myAccounts", this::myAccounts);
         app.get("/allAccounts", this::allAccounts);
-        app.post("/withdraw", this::withdraw);
-        app.post("/deposit", this::deposit);
+        app.get("/account", this::getAccountByID);
     }
 
     private void createNewAccount(Context context) {
@@ -65,7 +62,27 @@ public class AccountController implements Controller {
             context.result("You are not logged in");
             return;
         }
-        context.json(accountService.findByOwnerId(ownerID));
+        context.status(HttpStatus.OK);
+        context.json(accountService.findByOwnerId(ownerID).stream().map(Account::toString).toList());
+    }
+
+    private void getAccountByID(Context context) {
+        if(!isEmployeeOrAccountOwner.validate(context)){
+            context.status(HttpStatus.UNAUTHORIZED);
+            context.result("You are not authorized to view this page");
+            return;
+        }
+
+        Account account;
+        try{
+            account = accountService.findById(context.queryParam("accountNumber"));
+        } catch (DataNotFoundException e) {
+            context.status(HttpStatus.NOT_FOUND);
+            context.result("Account not found");
+            return;
+        }
+        context.status(HttpStatus.OK);
+        context.json(account);
     }
 
     private void allAccounts(Context context) {

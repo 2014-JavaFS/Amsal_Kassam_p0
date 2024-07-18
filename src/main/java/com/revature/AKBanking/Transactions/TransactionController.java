@@ -2,6 +2,8 @@ package com.revature.AKBanking.Transactions;
 
 import com.revature.AKBanking.Accounts.Account;
 import com.revature.AKBanking.util.interfaces.Controller;
+import static com.revature.AKBanking.util.ValidatorImpl.*;
+
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;

@@ -10,6 +10,7 @@ import com.revature.AKBanking.util.exceptions.DataNotFoundException;
 import com.revature.AKBanking.util.exceptions.InvalidInputException;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
+import static com.revature.AKBanking.util.ValidatorImpl.*;
 
 public class UserController implements Controller {
     private final UserService userService;
@@ -17,11 +18,6 @@ public class UserController implements Controller {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-    Validator<Context> isEmployee = (Context context) -> {
-        String userType = context.header("userType");
-        return !(userType == null || userType.isEmpty() || userType.equals(User.userType.CUSTOMER.name()));
-    };
 
     @Override
     public void registerPaths(Javalin app) {

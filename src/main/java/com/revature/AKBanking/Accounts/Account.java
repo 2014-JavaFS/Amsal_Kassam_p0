@@ -37,6 +37,6 @@ public class Account {
     }
 
     public String toString(){
-        return String.format("acc#: %s owner: %s balance: %d", accountNumber, ownerID, balance);
+        return String.format("acc#: %s owner: %s balance: $%d.%02d", accountNumber, ownerID, balance/100, balance%100);
     }
 }
