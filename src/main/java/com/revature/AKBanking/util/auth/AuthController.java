@@ -19,19 +19,26 @@ public class AuthController implements Controller {
     @Override
     public void registerPaths(Javalin app) {
         app.post("/login", this::postLogin);
+        app.get("/logout", this::logout);
     }
 
-    private void postLogin(Context ctx) {
-        String email = ctx.queryParam("email");
-        String password = ctx.queryParam("password");
+    private void postLogin(Context context) {
+        String email = context.queryParam("email");
+        String password = context.queryParam("password");
 
         try {
             User user = authService.login(email, password);
-            ctx.header("userID", String.valueOf(user.getId()));
-            ctx.header("userType", user.getType().name());
-            ctx.status(200);
+            context.header("userID", String.valueOf(user.getId()));
+            context.header("userType", user.getType().name());
+            context.status(200);
         } catch (AuthenticationException e) {
-            ctx.status(HttpStatus.UNAUTHORIZED);
+            context.status(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    private void logout(Context context) {
+        context.removeHeader("userID");
+        context.removeHeader("userType");
+        context.status(200);
     }
 }

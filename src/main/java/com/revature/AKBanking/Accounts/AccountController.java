@@ -11,6 +11,8 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
+import java.util.List;
+
 
 public class AccountController implements Controller {
     private AccountService accountService;
@@ -62,8 +64,15 @@ public class AccountController implements Controller {
             context.result("You are not logged in");
             return;
         }
+        List<Account> accounts = accountService.findByOwnerId(ownerID);
+        if(accounts == null || accounts.isEmpty()){
+            context.status(HttpStatus.NOT_FOUND);
+            context.result("No accounts for currently logged in user");
+            return;
+        }
+
         context.status(HttpStatus.OK);
-        context.json(accountService.findByOwnerId(ownerID).stream().map(Account::toString).toList());
+        context.json(accounts.stream().map(Account::toString).toList());
     }
 
     private void getAccountByID(Context context) {
