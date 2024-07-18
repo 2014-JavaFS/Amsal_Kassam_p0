@@ -2,7 +2,6 @@ package com.revature.AKBanking.Users;
 
 import java.util.List;
 
-import com.revature.AKBanking.util.interfaces.Validator;
 import io.javalin.Javalin;
 
 import com.revature.AKBanking.util.interfaces.Controller;

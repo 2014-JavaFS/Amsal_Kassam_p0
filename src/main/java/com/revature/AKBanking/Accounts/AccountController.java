@@ -13,7 +13,7 @@ import io.javalin.http.HttpStatus;
 
 
 public class AccountController implements Controller {
-    private AccountService accountService = null;
+    private AccountService accountService;
 
     Validator<Context> isEmployeeOrAccountOwner = (Context context) -> {
         return (context.header("userID") != null && context.header("userType") != null)  //null checking
@@ -94,6 +94,8 @@ public class AccountController implements Controller {
         context.json(accountService.findAll());
     }
 
+//DEPRECATED, use transactionController.postTransaction instead
+/*
     private void deposit(Context context) {
         int accountNumber, amount;
         Account account;
@@ -156,5 +158,5 @@ public class AccountController implements Controller {
             context.status(HttpStatus.UNPROCESSABLE_CONTENT);
             context.result(e.getMessage());
         }
-    }
+    }*/
 }
